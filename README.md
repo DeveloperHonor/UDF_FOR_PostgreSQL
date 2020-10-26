@@ -2,7 +2,7 @@
 
 > **Migrating database from Oracle to RDS for PostgreSQL compatible function**
 
-**Step 1： copy the the code of compatible.sql**
+**Step 1： Copy the the code of compatible.sql**
 
 **Step 2:  Using PGADMIN client tools logging to rds for PostgreSQL**
 
