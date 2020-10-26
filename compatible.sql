@@ -1,4 +1,4 @@
---These function will be used in PostgreSQL when migrating database from Oracle to rds for PostgreSQL
+--Migrate database from Oracle to PostgreSQL
 /*************************************************************
 *Author:Songshaohua                                          *
 *Date:2020-10-22                                             *
@@ -37,13 +37,13 @@ CREATE OR REPLACE FUNCTION nvl(date,date)
 RETURNS date
 AS
 $FUNCTION$
-	BEGIN
-		IF $1 IS NULL THEN
-			RETURN $2;
-		ELSE 
-			RETURN $1;
-		END IF;
-	END;
+    BEGIN
+        IF $1 IS NULL THEN
+            RETURN $2;
+        ELSE 
+            RETURN $1;
+        END IF;
+    END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
 
@@ -51,13 +51,13 @@ CREATE OR REPLACE FUNCTION nvl(timestamp,timestamp)
 RETURNS timestamp
 AS 
 $FUNCTION$
-	BEGIN
-		IF $1 IS NULL THEN 
-			RETURN $2;
-		ELSE
-			RETURN $1;
-		END IF;
-	END;
+    BEGIN
+        IF $1 IS NULL THEN 
+            RETURN $2;
+        ELSE
+            RETURN $1;
+        END IF;
+    END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
 /***************************************************
@@ -69,13 +69,13 @@ CREATE OR REPLACE FUNCTION nvl2(bigint,bigint,bigint)
 RETURNS bigint
 AS
 $FUNCTION$
-	BEGIN
-		IF $1 IS NULL THEN
-			RETURN $3;
-		ELSE 
-			RETURN $2;
-		END IF;
-	END;
+    BEGIN
+        IF $1 IS NULL THEN
+            RETURN $3;
+        ELSE 
+            RETURN $2;
+        END IF;
+    END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
 
@@ -83,13 +83,13 @@ CREATE OR REPLACE FUNCTION nvl2(text,text,text)
 RETURNS text
 AS
 $FUNCTION$
-	BEGIN
-		IF $1 IS NULL THEN
-			RETURN $3;
-		ELSE 
-			RETURN $2;
-		END IF;
-	END;
+    BEGIN
+        IF $1 IS NULL THEN
+            RETURN $3;
+        ELSE 
+            RETURN $2;
+        END IF;
+    END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
 
@@ -97,13 +97,13 @@ CREATE OR REPLACE FUNCTION nvl2(date,date,date)
 RETURNS date
 AS
 $FUNCTION$
-	BEGIN
-		IF $1 IS NULL THEN
-			RETURN $3;
-		ELSE 
-			RETURN $2;
-		END IF;
-	END;
+    BEGIN
+        IF $1 IS NULL THEN
+            RETURN $3;
+        ELSE 
+            RETURN $2;
+        END IF;
+    END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
 
@@ -112,13 +112,13 @@ CREATE OR REPLACE FUNCTION nvl2(timestamp,timestamp,timestamp)
 RETURNS timestamp
 AS
 $FUNCTION$
-	BEGIN
-		IF $1 IS NULL THEN
-			RETURN $3;
-		ELSE 
-			RETURN $2;
-		END IF;
-	END;
+    BEGIN
+        IF $1 IS NULL THEN
+            RETURN $3;
+        ELSE 
+            RETURN $2;
+        END IF;
+    END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
 
@@ -141,13 +141,13 @@ RETURNS date
 AS 
 $FUNCTION$
 DECLARE 
-	v_date date;
-	v_sql  text;
+    v_date date;
+    v_sql  text;
 BEGIN
-	v_sql := ' SELECT to_date(' ||chr(39) || $1 || chr(39) || ',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
-	'+' || ' INTERVAL ' || chr(39)|| $2 || ' Mon' || chr(39);
-	execute v_sql INTO v_date;
-	RETURN v_date;
+    v_sql := ' SELECT to_date(' ||chr(39) || $1 || chr(39) || ',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
+    '+' || ' INTERVAL ' || chr(39)|| $2 || ' Mon' || chr(39);
+    execute v_sql INTO v_date;
+    RETURN v_date;
 END;
 $FUNCTION$
 LANGUAGE PLPGSQL; 
@@ -157,14 +157,14 @@ RETURNS date
 AS 
 $FUNCTION$
 DECLARE 
-	v_date date;
-	v_sql  text;
+    v_date date;
+    v_sql  text;
 BEGIN
-	v_sql := 'SELECT to_date(to_char('
-	||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
-	',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
-	execute v_sql INTO v_date;
-	RETURN v_date;
+    v_sql := 'SELECT to_date(to_char('
+    ||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
+    ',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
+    execute v_sql INTO v_date;
+    RETURN v_date;
 END;
 $FUNCTION$
 LANGUAGE PLPGSQL; 
@@ -174,13 +174,13 @@ RETURNS date
 AS 
 $FUNCTION$
 DECLARE 
-	v_date date;
-	v_sql  text;
+    v_date date;
+    v_sql  text;
 BEGIN
-	v_sql := 'SELECT to_date(to_char('
-	||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
-	',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
-	RETURN v_date;
+    v_sql := 'SELECT to_date(to_char('
+    ||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
+    ',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
+    RETURN v_date;
 END;
 $FUNCTION$
 LANGUAGE PLPGSQL; 
@@ -190,14 +190,14 @@ RETURNS date
 AS 
 $FUNCTION$
 DECLARE 
-	v_date date;
-	v_sql  text;
+    v_date date;
+    v_sql  text;
 BEGIN
-	v_sql := 'SELECT to_date(to_char('
-	||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
-	',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
-	execute v_sql INTO v_date;
-	RETURN v_date;
+    v_sql := 'SELECT to_date(to_char('
+    ||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
+    ',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
+    execute v_sql INTO v_date;
+    RETURN v_date;
 END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
