@@ -180,6 +180,7 @@ BEGIN
     v_sql := 'SELECT to_date(to_char('
     ||chr(39) || $1 || chr(39) || '::date,' || chr(39) || 'YYYYMMDD' || chr(39) || ')' ||
     ',' || chr(39) || 'YYYYMMDD' || chr(39) || ')' || '+' || ' INTERVAL ' || chr(39) || $2 || ' Mon' || chr(39);
+    execute v_sql INTO v_date;
     RETURN v_date;
 END;
 $FUNCTION$
@@ -201,3 +202,125 @@ BEGIN
 END;
 $FUNCTION$
 LANGUAGE PLPGSQL;
+
+/********************************************************************
+*decode(value,if1,result1,if2,result2,...,ifn,resultn,default)      * 
+*Example:                                           *               *
+*SELECT decode('Math','Math','Mathmatics','Eng','English','Other'); *
+*   decode                                                          *
+*------------                                                       *
+* Mathmatics                                                        *
+*SELECT decode(1,1,01,2,02,0);                                      *
+* decode                                                            *
+*--------  
+* 01                                                         *
+*********************************************************************/
+CREATE OR REPLACE FUNCTION decode(variadic text[])
+RETURNS text
+AS 
+$FUNCTION$
+DECLARE
+    v_array_length      bigint := array_length($1,1);
+    v_result            text;
+    v_err_msg           text;
+    v_err_code          text;
+BEGIN
+    IF v_array_length < 3 THEN 
+        v_err_code    := 'p60001';
+        v_err_msg     := 'Not enough arguments for function,which needs at least three arguments.';
+        RAISE EXCEPTION '%: %',v_err_code ,v_err_msg;
+        RETURN NULL;
+    ELSE
+        FOR i IN 2..(v_array_length - 1) LOOP 
+            v_result := NULL; 
+            IF mod(i, 2) = 0 THEN 
+                IF $1[1] = $1[i] THEN 
+                v_result := $1[i+1]; 
+                ELSIF $1[1] != $1[i] THEN 
+                    IF v_array_length = i + 2 AND v_array_length > 3 THEN 
+                        v_result := $1[v_array_length]; 
+                    END IF; 
+                END IF; 
+            END IF; 
+        exit WHEN v_result IS NOT NULL; 
+        END LOOP; 
+    END IF;
+    RETURN v_result;
+END;
+$FUNCTION$
+LANGUAGE PLPGSQL;
+
+
+
+CREATE OR REPLACE FUNCTION decode(variadic bigint[])
+RETURNS text
+AS 
+$FUNCTION$
+DECLARE
+    v_array_length      bigint := array_length($1,1);
+    v_result            text;
+    v_err_msg           text;
+    v_err_code          text;
+BEGIN
+    IF v_array_length < 3 THEN 
+        v_err_code    := 'p60001';
+        v_err_msg     := 'Not enough arguments for function,which needs at least three arguments.';
+        RAISE EXCEPTION '%: %',v_err_code ,v_err_msg;
+        RETURN NULL;
+    ELSE
+        FOR i IN 2..(v_array_length - 1) LOOP 
+            v_result := NULL; 
+            IF mod(i, 2) = 0 THEN 
+                IF $1[1] = $1[i] THEN 
+                v_result := $1[i+1]; 
+                ELSIF $1[1] != $1[i] THEN 
+                    IF v_array_length = i + 2 AND v_array_length > 3 THEN 
+                        v_result := $1[v_array_length]; 
+                    END IF; 
+                END IF; 
+            END IF; 
+        exit WHEN v_result IS NOT NULL; 
+        END LOOP; 
+    END IF;
+    RETURN v_result;
+END;
+$FUNCTION$
+LANGUAGE PLPGSQL;
+
+
+
+postgres=# SELECT decode('Math','Math','Mathmatics','Eng','English','Other');
+   decode   
+------------
+ Mathmatics
+(1 row)
+
+postgres=# SELECT decode('Eng','Math','Mathmatics','Eng','English','Other');
+ decode  
+---------
+ English
+(1 row)
+
+postgres=# SELECT decode('Physical','Math','Mathmatics','Eng','English','Other');
+ decode 
+--------
+ Other
+(1 row)
+
+postgres=# SELECT decode(1,1,01,2,02,0);
+ decode 
+--------
+ 1
+(1 row)
+
+postgres=# SELECT decode(2,1,01,2,02,0);
+ decode 
+--------
+ 2
+(1 row)
+
+postgres=# SELECT decode(3,1,01,2,02,0);
+ decode 
+--------
+ 0
+(1 row)
