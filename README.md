@@ -84,3 +84,39 @@
      2020-04-02
     (1 row)
     
+    postgres=# SELECT decode('Math','Math','Mathmatics','Eng','English','Other');
+       decode   
+    ------------
+     Mathmatics
+    (1 row)
+    
+    postgres=# SELECT decode('Eng','Math','Mathmatics','Eng','English','Other');
+     decode  
+    ---------
+     English
+    (1 row)
+    
+    postgres=# SELECT decode('Physical','Math','Mathmatics','Eng','English','Other');
+     decode 
+    --------
+     Other
+    (1 row)
+    
+    postgres=# SELECT decode(1,1,01,2,02,0);
+     decode 
+    --------
+     1
+    (1 row)
+    
+    postgres=# SELECT decode(2,1,01,2,02,0);
+     decode 
+    --------
+     2
+    (1 row)
+    
+    postgres=# SELECT decode(3,1,01,2,02,0);
+     decode 
+    --------
+     0
+    (1 row)
+    
